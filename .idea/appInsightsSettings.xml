@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="id.ac.pnm.comments" />
+                  <option name="mobileSdkAppId" value="1:235217767810:android:fe13f6ac339c5842d9539b" />
+                  <option name="projectId" value="uas-comments-app" />
+                  <option name="projectNumber" value="235217767810" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

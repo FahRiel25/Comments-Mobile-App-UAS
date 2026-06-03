@@ -58,7 +58,18 @@ class HomeFragment : Fragment() {
 
         val username = user?.displayName ?: "User"
 
-        tvUsername.text = "Hello, $username"
+        val text = "Hello, $username"
+
+        val spannable = SpannableString(text)
+
+        spannable.setSpan(
+            ForegroundColorSpan(Color.parseColor("#A855F7")),
+            7,
+            text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        tvUsername.text = spannable
     }
 
     private fun setupRecyclerView() {

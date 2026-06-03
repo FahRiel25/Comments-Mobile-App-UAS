@@ -8,6 +8,14 @@ import android.view.ViewGroup
 import id.ac.pnm.comments.R
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import id.ac.pnm.comments.adapter.PostAdapter
+import id.ac.pnm.comments.ui.model.Post
+import android.graphics.Color
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +29,7 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
     private lateinit var tvUsername: TextView
+    private lateinit var rvPosts: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,11 +43,14 @@ class HomeFragment : Fragment() {
 
         loadUsername()
 
+        setupRecyclerView()
+
         return view
     }
 
     private fun initViews(view: View) {
         tvUsername = view.findViewById(R.id.tvUsername)
+        rvPosts = view.findViewById(R.id.rvPosts)
     }
 
     private fun loadUsername() {
@@ -47,6 +59,36 @@ class HomeFragment : Fragment() {
         val username = user?.displayName ?: "User"
 
         tvUsername.text = "Hello, $username"
+    }
+
+    private fun setupRecyclerView() {
+
+        val posts = listOf(
+            Post(
+                "Fahriel",
+                "sunset hits different when you're at the right place.",
+                321,
+                23
+            ),
+            Post(
+                "Fahriel",
+                "coffee + code = peace ☕",
+                198,
+                12
+            ),
+            Post(
+                "Fahriel",
+                "city lights ✨",
+                270,
+                15
+            )
+        )
+
+        rvPosts.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        rvPosts.adapter =
+            PostAdapter(posts)
     }
 
 }

@@ -5,56 +5,80 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import id.ac.pnm.comments.R
+import id.ac.pnm.comments.ui.adapter.FavoriteAdapter
+import id.ac.pnm.comments.ui.model.Favorite
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavoriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavoriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        val view = inflater.inflate(R.layout.fragment_favorite, container, false)
+        val rvFavorites = view.findViewById<RecyclerView>(R.id.rvFavorites)
+        val favoriteList = getFavorite()
+        val adapter = FavoriteAdapter(favoriteList)
+        rvFavorites.adapter = adapter
+        rvFavorites.layoutManager = LinearLayoutManager(requireContext())
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavoriteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoriteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    fun getFavorite(): List<Favorite> {
+        val data = mutableListOf<Favorite>()
+        data.add(
+            Favorite(
+                nama = "Fahriel",
+                username = "@fahriel.dev",
+                time = "2h",
+                content = "sunset hits different when you're at the right place",
+                likeCount = 321,
+                commentCount = 23
+            )
+        )
+
+        data.add(
+            Favorite(
+                nama = "alyaaa",
+                username = "@alyaa",
+                time = "2h",
+                content = "city lights✨",
+                likeCount = 270,
+                commentCount = 15
+            )
+        )
+        data.add(
+            Favorite(
+                nama = "rinda",
+                username = "@rien.daa",
+                time = "1h",
+                content = "i need this kind of view in my life",
+                likeCount = 107,
+                commentCount = 23
+            )
+        )
+        data.add(
+            Favorite(
+                nama = "reza",
+                username = "@reza.dev",
+                time = "15m",
+                content = "just finished a late night coding session. coffe + code = peace☕",
+                likeCount = 110,
+                commentCount = 23
+            )
+        )
+        data.add(
+            Favorite(
+                nama = "salwa",
+                username = "@slwa.iz",
+                time = "10m",
+                content = "enjoy the beautiful sunset this afternoon",
+                likeCount = 704,
+                commentCount = 70
+            )
+        )
+        return data
     }
 }

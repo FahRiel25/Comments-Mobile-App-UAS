@@ -9,7 +9,7 @@
     android:background="#000000">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/icon_profile"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="70dp"
@@ -30,7 +30,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+        app:layout_constraintTop_toBottomOf="@+id/icon_profile"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -70,11 +70,12 @@
                 android:padding="12dp">
 
                 <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_profile"
-                android:layout_marginEnd="12dp"
-                app:tint="#7C5CBF"/>
+                    android:id="@+id/icon_profile2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile"
+                    android:layout_marginEnd="12dp"
+                    app:tint="#7C5CBF"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -88,7 +89,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nama username"
+                    tools:text="Nama username"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -106,6 +107,7 @@
                 android:padding="12dp">
 
                 <ImageView
+                    android:id="@+id/icon_email"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_email"
@@ -124,7 +126,7 @@
                     android:id="@+id/tvEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    tools:text="Email"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"/>
             </LinearLayout>

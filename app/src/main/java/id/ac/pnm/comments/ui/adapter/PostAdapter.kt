@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.model.Post
 import android.widget.ImageView
-import android.graphics.Color
-import android.widget.Toast
+import android.content.Intent
+import id.ac.pnm.comments.ui.activity.CommentActivity
 
 class PostAdapter(
     private val posts: List<Post>
@@ -104,13 +104,14 @@ class PostAdapter(
             }
         holder.iconComment.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 holder.itemView.context,
-                "Open Comments",
-                Toast.LENGTH_SHORT
-            ).show()
+                CommentActivity::class.java
+            )
 
-        }
+            holder.itemView.context.startActivity(intent)
+
+            }
         }
 
         override fun getItemCount(): Int {

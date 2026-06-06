@@ -12,13 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Comments">
         <activity
-            android:name=".ui.auth.RegisterActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:name=".ui.activity.CommentActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.auth.LoginActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,5 +1,6 @@
 package id.ac.pnm.comments.ui.model
 
+
 data class Post(
     val nama: String,
     val username: String,

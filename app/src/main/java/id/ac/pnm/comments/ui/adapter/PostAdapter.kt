@@ -12,7 +12,7 @@ import android.content.Intent
 import id.ac.pnm.comments.ui.activity.CommentActivity
 
 class PostAdapter(
-    private val posts: List<Post>
+    private val posts: MutableList<Post>
 
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -41,6 +41,9 @@ class PostAdapter(
 
         val iconComment: ImageView =
             view.findViewById(R.id.iconComment)
+
+        val iconDelete: ImageView =
+            view.findViewById(R.id.iconDelete)
     }
 
     override fun onCreateViewHolder(
@@ -102,17 +105,34 @@ class PostAdapter(
 
                 holder.tvLikeCount.text = post.likes.toString()
             }
-        holder.iconComment.setOnClickListener {
+            holder.iconComment.setOnClickListener {
 
             val intent = Intent(
                 holder.itemView.context,
                 CommentActivity::class.java
             )
 
-            holder.itemView.context.startActivity(intent)
+            intent.putExtra(
+                "postPosition",
+                position
+            )
 
+            holder.itemView.context.startActivity(intent)
+            }
+
+            holder.iconDelete.setOnClickListener {
+
+            posts.removeAt(position)
+
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(
+                position,
+                posts.size
+            )
             }
         }
+
+
 
         override fun getItemCount(): Int {
             return posts.size

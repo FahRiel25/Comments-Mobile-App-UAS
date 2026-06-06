@@ -16,6 +16,10 @@ import android.graphics.Color
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.content.Intent
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import id.ac.pnm.comments.ui.activity.CreatePostActivity
+import id.ac.pnm.comments.ui.model.PostRepository
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +34,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var tvUsername: TextView
     private lateinit var rvPosts: RecyclerView
+
+    private lateinit var fabAddPost: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +57,7 @@ class HomeFragment : Fragment() {
     private fun initViews(view: View) {
         tvUsername = view.findViewById(R.id.tvUsername)
         rvPosts = view.findViewById(R.id.rvPosts)
+        fabAddPost = view.findViewById(R.id.fabAddPost)
     }
 
     private fun loadUsername() {
@@ -71,41 +78,51 @@ class HomeFragment : Fragment() {
 
         tvUsername.text = spannable
     }
-
     private fun setupRecyclerView() {
 
-        val posts = listOf(
-            Post(
-                nama = "Fahriel",
-                username = "@fahriel.dev",
-                time = "2h",
-                content = "sunset hits different when you're at the right place.",
-                likes = 321,
-                comments = 23
-            ),
-            Post(
-                nama = "Fahriel",
-                username = "@fahriel.dev",
-                time = "1h",
-                content = "coffee + code = peace ☕",
-                likes = 198,
-                comments = 12
-            ),
-            Post(
-                nama = "Fahriel",
-                username = "@fahriel.dev",
-                time = "30m",
-                content = "city lights ✨",
-                likes = 270,
-                comments = 15
+        if (PostRepository.posts.isEmpty()) {
+
+            PostRepository.posts.add(
+                Post(
+                    nama = "Fahriel",
+                    username = "@fahriel.dev",
+                    time = "2h",
+                    content = "sunset hits different when you're at the right place.",
+                    likes = 321,
+                    comments = 23
+                )
             )
-        )
+
+            PostRepository.posts.add(
+                Post(
+                    nama = "Fahriel",
+                    username = "@fahriel.dev",
+                    time = "1h",
+                    content = "coffee + code = peace ☕",
+                    likes = 198,
+                    comments = 12
+                )
+            )
+        }
+
+        fabAddPost.setOnClickListener {
+
+            val intent =
+                Intent(requireContext(), CreatePostActivity::class.java)
+
+            startActivity(intent)
+        }
 
         rvPosts.layoutManager =
             LinearLayoutManager(requireContext())
 
         rvPosts.adapter =
-            PostAdapter(posts)
+            PostAdapter(PostRepository.posts)
     }
+    override fun onResume() {
+        super.onResume()
 
+        rvPosts.adapter =
+            PostAdapter(PostRepository.posts)
+    }
 }

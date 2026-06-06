@@ -10,20 +10,55 @@ import id.ac.pnm.comments.ui.adapter.CommentAdapter
 import id.ac.pnm.comments.ui.model.Comment
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import id.ac.pnm.comments.ui.model.PostRepository
+import android.widget.ImageView
 
 
 
 class CommentActivity : AppCompatActivity() {
     private var replyingTo: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment)
 
+        val btnBack = findViewById<ImageView>(R.id.btnBack)
+
+        btnBack.setOnClickListener {
+            finish()
+        }
+
         val etComment = findViewById<EditText>(R.id.etComment)
         etComment.hint = "Write a comment..."
+
         val btnSend = findViewById<Button>(R.id.btnSend)
 
         val rvComments = findViewById<RecyclerView>(R.id.rvComments)
+
+        val postPosition =
+            intent.getIntExtra("postPosition", 0)
+
+        val post =
+            PostRepository.posts[postPosition]
+
+        val tvPostName =
+            findViewById<TextView>(R.id.tvPostName)
+
+        val tvPostUsername =
+            findViewById<TextView>(R.id.tvPostUsername)
+
+        val tvPostContent =
+            findViewById<TextView>(R.id.tvPostContent)
+
+        tvPostName.text = post.nama
+
+        tvPostUsername.text =
+            "${post.username} · ${post.time}"
+
+        tvPostContent.text =
+            post.content
 
 
         val comments = mutableListOf(

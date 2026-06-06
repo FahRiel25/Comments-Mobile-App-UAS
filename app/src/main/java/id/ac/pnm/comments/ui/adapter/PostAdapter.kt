@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.model.Post
+import android.widget.ImageView
+import android.graphics.Color
 
 class PostAdapter(
     private val posts: List<Post>
@@ -32,6 +34,9 @@ class PostAdapter(
 
         val tvCommentCount: TextView =
             view.findViewById(R.id.tvCommentCount)
+
+        val iconFavorite: ImageView =
+            view.findViewById(R.id.iconFavorite)
     }
 
     override fun onCreateViewHolder(
@@ -58,9 +63,44 @@ class PostAdapter(
         holder.tvContent.text = post.content
         holder.tvLikeCount.text = post.likes.toString()
         holder.tvCommentCount.text = post.comments.toString()
-    }
 
-    override fun getItemCount(): Int {
-        return posts.size
+        if (post.isLiked) {
+            holder.iconFavorite.setImageResource(
+                R.drawable.ic_favorite_filled
+            )
+        } else {
+            holder.iconFavorite.setImageResource(
+                R.drawable.ic_favorite
+            )
+        }
+
+
+            holder.iconFavorite.setOnClickListener {
+
+                if (post.isLiked) {
+
+                    post.isLiked = false
+                    post.likes--
+
+                    holder.iconFavorite.setImageResource(
+                        R.drawable.ic_favorite
+                    )
+
+                } else {
+
+                    post.isLiked = true
+                    post.likes++
+
+                    holder.iconFavorite.setImageResource(
+                        R.drawable.ic_favorite_filled
+                    )
+                }
+
+                holder.tvLikeCount.text = post.likes.toString()
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return posts.size
+        }
     }
-}

@@ -9,6 +9,7 @@ import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.model.Post
 import android.widget.ImageView
 import android.graphics.Color
+import android.widget.Toast
 
 class PostAdapter(
     private val posts: List<Post>
@@ -37,6 +38,9 @@ class PostAdapter(
 
         val iconFavorite: ImageView =
             view.findViewById(R.id.iconFavorite)
+
+        val iconComment: ImageView =
+            view.findViewById(R.id.iconComment)
     }
 
     override fun onCreateViewHolder(
@@ -98,6 +102,15 @@ class PostAdapter(
 
                 holder.tvLikeCount.text = post.likes.toString()
             }
+        holder.iconComment.setOnClickListener {
+
+            Toast.makeText(
+                holder.itemView.context,
+                "Open Comments",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
         }
 
         override fun getItemCount(): Int {

@@ -14,17 +14,24 @@ class PostAdapter(
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        val tvName: TextView =
+            view.findViewById(R.id.tvName)
+
         val tvUsername: TextView =
-            view.findViewById(R.id.tvPostUsername)
+            view.findViewById(R.id.tvUsername)
+
+        val tvTime: TextView =
+            view.findViewById(R.id.tvTime)
 
         val tvContent: TextView =
-            view.findViewById(R.id.tvPostContent)
+            view.findViewById(R.id.tvContent)
 
-        val tvLikes: TextView =
-            view.findViewById(R.id.tvLikes)
+        val tvLikeCount: TextView =
+            view.findViewById(R.id.tvLikeCount)
 
-        val tvComments: TextView =
-            view.findViewById(R.id.tvComments)
+        val tvCommentCount: TextView =
+            view.findViewById(R.id.tvCommentCount)
     }
 
     override fun onCreateViewHolder(
@@ -45,10 +52,12 @@ class PostAdapter(
 
         val post = posts[position]
 
+        holder.tvName.text = post.nama
         holder.tvUsername.text = post.username
+        holder.tvTime.text = "· ${post.time}"
         holder.tvContent.text = post.content
-        holder.tvLikes.text = "💜 ${post.likes}"
-        holder.tvComments.text = "💬 ${post.comments}"
+        holder.tvLikeCount.text = post.likes.toString()
+        holder.tvCommentCount.text = post.comments.toString()
     }
 
     override fun getItemCount(): Int {

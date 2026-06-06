@@ -76,22 +76,28 @@ class HomeFragment : Fragment() {
 
         val posts = listOf(
             Post(
-                "Fahriel",
-                "sunset hits different when you're at the right place.",
-                321,
-                23
+                nama = "Fahriel",
+                username = "@fahriel.dev",
+                time = "2h",
+                content = "sunset hits different when you're at the right place.",
+                likes = 321,
+                comments = 23
             ),
             Post(
-                "Fahriel",
-                "coffee + code = peace ☕",
-                198,
-                12
+                nama = "Fahriel",
+                username = "@fahriel.dev",
+                time = "1h",
+                content = "coffee + code = peace ☕",
+                likes = 198,
+                comments = 12
             ),
             Post(
-                "Fahriel",
-                "city lights ✨",
-                270,
-                15
+                nama = "Fahriel",
+                username = "@fahriel.dev",
+                time = "30m",
+                content = "city lights ✨",
+                likes = 270,
+                comments = 15
             )
         )
 

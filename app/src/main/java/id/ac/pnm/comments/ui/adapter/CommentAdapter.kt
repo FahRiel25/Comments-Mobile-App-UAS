@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.model.Comment
 import android.widget.ImageView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CommentAdapter(
     private val comments: List<Comment>,
@@ -75,7 +76,6 @@ class CommentAdapter(
         holder.tvLikeCount.text =
             comment.likeCount.toString()
 
-
         holder.ivLike.setOnClickListener {
 
             if (comment.isLiked) {
@@ -85,6 +85,16 @@ class CommentAdapter(
                 comment.likeCount++
                 comment.isLiked = true
             }
+
+            FirebaseFirestore.getInstance()
+                .collection("comments")
+                .document(comment.id)
+                .update(
+                    mapOf(
+                        "likeCount" to comment.likeCount,
+                        "isLiked" to comment.isLiked
+                    )
+                )
 
             notifyItemChanged(position)
         }

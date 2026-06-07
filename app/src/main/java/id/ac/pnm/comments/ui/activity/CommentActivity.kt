@@ -13,11 +13,14 @@ import android.widget.EditText
 import android.widget.TextView
 import id.ac.pnm.comments.ui.model.PostRepository
 import android.widget.ImageView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
 
 
 
 class CommentActivity : AppCompatActivity() {
     private var replyingTo: String? = null
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -52,6 +55,15 @@ class CommentActivity : AppCompatActivity() {
         val tvPostContent =
             findViewById<TextView>(R.id.tvPostContent)
 
+        val tvLikeCount =
+            findViewById<TextView>(R.id.tvLikeCount)
+
+        val tvCommentCountHeader =
+            findViewById<TextView>(R.id.tvCommentCountHeader)
+
+        val tvCommentCount =
+            findViewById<TextView>(R.id.tvCommentCount)
+
         tvPostName.text = post.nama
 
         tvPostUsername.text =
@@ -60,30 +72,15 @@ class CommentActivity : AppCompatActivity() {
         tvPostContent.text =
             post.content
 
+        tvLikeCount.text = post.likes.toString()
 
-        val comments = mutableListOf(
-            Comment(
-                "Alya",
-                "@alya",
-                "this is so truee ✨",
-                "2h",
-                18
-            ),
-            Comment(
-                "reza.dev",
-                "@reza.dev",
-                "where is this place? looks amazing!",
-                "1h",
-                9
-            ),
-            Comment(
-                "indriii",
-                "@indriii",
-                "i need this kind of view in my life 🌄",
-                "1h",
-                7
-            )
-        )
+        tvCommentCountHeader.text =
+            post.comments.toString()
+
+        tvCommentCount.text =
+            "${post.comments} Comments"
+
+        val comments = mutableListOf<Comment>()
 
         rvComments.layoutManager = LinearLayoutManager(this)
 
@@ -97,6 +94,30 @@ class CommentActivity : AppCompatActivity() {
         rvComments.layoutManager = LinearLayoutManager(this)
         rvComments.adapter = adapter
 
+        db.collection("comments")
+            .whereEqualTo("postId", post.id)
+            .get()
+            .addOnSuccessListener { documents ->
+
+                comments.clear()
+
+                for (document in documents) {
+
+                    comments.add(
+                        Comment(
+                            id = document.id,
+                            document.getString("name") ?: "",
+                            document.getString("username") ?: "",
+                            document.getString("content") ?: "",
+                            "now",
+                            document.getLong("likeCount")?.toInt() ?: 0,
+                            document.getBoolean("isLiked") ?: false
+                        )
+                    )
+                }
+
+                adapter.notifyDataSetChanged()
+            }
 
         btnSend.setOnClickListener {
 
@@ -104,30 +125,60 @@ class CommentActivity : AppCompatActivity() {
 
             if (text.isNotEmpty()) {
 
-                comments.add(
-                    Comment(
-                        "You",
-                        "@you",
-                        text,
-                        "now",
-                        0,
-                        false,
-                        replyingTo
-                    )
+                val user = FirebaseAuth.getInstance().currentUser
+                val username = user?.displayName ?: "User"
+
+                val commentData = hashMapOf(
+                    "postId" to post.id,
+                    "username" to "@$username",
+                    "name" to username,
+                    "content" to text,
+                    "timestamp" to System.currentTimeMillis(),
+                    "likeCount" to 0,
+                    "isLiked" to false
                 )
 
-                adapter.notifyItemInserted(
-                    comments.size - 1
-                )
+                db.collection("comments")
+                    .add(commentData)
+                    .addOnSuccessListener {
 
-                rvComments.scrollToPosition(
-                    comments.size - 1
-                )
+                        comments.add(
 
-                etComment.text.clear()
-                replyingTo = null
-                etComment.hint = "Write a comment..."
+                            Comment(
+                                id = "",
+                                nama = username,
+                                username = "@$username",
+                                content = text,
+                                time = "now",
+                                likeCount = 0,
+                                isLiked = false,
+                                replyTo = replyingTo
+                            )
+                        )
+
+                        adapter.notifyItemInserted(
+                            comments.size - 1
+                        )
+
+                        rvComments.scrollToPosition(
+                            comments.size - 1
+                        )
+
+                        etComment.text.clear()
+                        replyingTo = null
+                        etComment.hint = "Write a comment..."
+
+                        db.collection("posts")
+                            .document(post.id)
+                            .update(
+                                "comments",
+                                post.comments + 1
+                            )
+                    }
             }
         }
+
+
+
     }
 }

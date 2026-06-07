@@ -20,6 +20,9 @@ import android.content.Intent
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import id.ac.pnm.comments.ui.activity.CreatePostActivity
 import id.ac.pnm.comments.ui.model.PostRepository
+import com.google.firebase.firestore.FirebaseFirestore
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +37,9 @@ class HomeFragment : Fragment() {
 
     private lateinit var tvUsername: TextView
     private lateinit var rvPosts: RecyclerView
+
+    private val db = FirebaseFirestore.getInstance()
+
 
     private lateinit var fabAddPost: FloatingActionButton
 
@@ -50,6 +56,8 @@ class HomeFragment : Fragment() {
         loadUsername()
 
         setupRecyclerView()
+
+        loadPosts()
 
         return view
     }
@@ -79,50 +87,52 @@ class HomeFragment : Fragment() {
         tvUsername.text = spannable
     }
     private fun setupRecyclerView() {
-
-        if (PostRepository.posts.isEmpty()) {
-
-            PostRepository.posts.add(
-                Post(
-                    nama = "Fahriel",
-                    username = "@fahriel.dev",
-                    time = "2h",
-                    content = "sunset hits different when you're at the right place.",
-                    likes = 321,
-                    comments = 23
-                )
-            )
-
-            PostRepository.posts.add(
-                Post(
-                    nama = "Fahriel",
-                    username = "@fahriel.dev",
-                    time = "1h",
-                    content = "coffee + code = peace ☕",
-                    likes = 198,
-                    comments = 12
-                )
-            )
-        }
-
         fabAddPost.setOnClickListener {
-
-            val intent =
+            startActivity(
                 Intent(requireContext(), CreatePostActivity::class.java)
-
-            startActivity(intent)
+            )
         }
 
         rvPosts.layoutManager =
             LinearLayoutManager(requireContext())
 
-        rvPosts.adapter =
-            PostAdapter(PostRepository.posts)
     }
+
+    private fun loadPosts() {
+
+        db.collection("posts")
+            .orderBy("timestamp")
+            .get()
+            .addOnSuccessListener { result ->
+
+                PostRepository.posts.clear()
+
+                for (document in result) {
+
+                    val content =
+                        document.getString("content") ?: ""
+
+                    PostRepository.posts.add(
+                        Post(
+                            id = document.id,
+                            nama = document.getString("name") ?: "User",
+                            username = document.getString("username") ?: "@user",
+                            time = "now",
+                            content = document.getString("content") ?: "",
+                            likes = document.getLong("likes")?.toInt() ?: 0,
+                            comments = document.getLong("comments")?.toInt() ?: 0,
+                            isLiked = document.getBoolean("isLiked") ?: false
+                        )
+                    )
+                }
+
+                rvPosts.adapter =
+                    PostAdapter(PostRepository.posts)
+            }
+    }
+
     override fun onResume() {
         super.onResume()
-
-        rvPosts.adapter =
-            PostAdapter(PostRepository.posts)
+        loadPosts()
     }
 }

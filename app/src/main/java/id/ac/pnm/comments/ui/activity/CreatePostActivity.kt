@@ -11,8 +11,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
 
 class CreatePostActivity : AppCompatActivity() {
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +27,10 @@ class CreatePostActivity : AppCompatActivity() {
         btnClose.setOnClickListener { finish() }
         val etCaption = findViewById<EditText>(R.id.etCaption)
         val btnPost = findViewById<Button>(R.id.btnPost)
+
+        if (btnPost == null) {
+            throw RuntimeException("btnPost NULL")
+        }
 
         etCaption.addTextChangedListener(object : TextWatcher {
 
@@ -48,23 +55,28 @@ class CreatePostActivity : AppCompatActivity() {
 
         btnPost.setOnClickListener {
 
-            val caption = etCaption.text.toString()
+            val user = FirebaseAuth.getInstance().currentUser
+            val username = user?.displayName ?: "User"
+            val caption = etCaption.text.toString().trim()
 
             if (caption.isNotEmpty()) {
-                PostRepository.posts.add(
-                    0,
-                    Post(
-                        nama = "You",
-                        username = "@you",
-                        time = "now",
-                        content = caption,
-                        likes = 0,
-                        comments = 0
-                    )
+
+                val post = hashMapOf(
+                    "name" to username,
+                    "username" to "@$username",
+                    "content" to caption,
+                    "likes" to 0,
+                    "comments" to 0,
+                    "timestamp" to System.currentTimeMillis(),
+                    "isLiked" to false,
                 )
 
-                finish()
+                db.collection("posts")
+                    .add(post)
+                    .addOnSuccessListener {
+                        finish()
+                    }
             }
-            }
+        }
         }
     }

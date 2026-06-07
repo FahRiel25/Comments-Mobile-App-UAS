@@ -10,6 +10,7 @@ import id.ac.pnm.comments.ui.model.Post
 import android.widget.ImageView
 import android.content.Intent
 import id.ac.pnm.comments.ui.activity.CommentActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PostAdapter(
     private val posts: MutableList<Post>
@@ -81,30 +82,39 @@ class PostAdapter(
             )
         }
 
+        holder.iconFavorite.setOnClickListener {
 
-            holder.iconFavorite.setOnClickListener {
+            if (post.isLiked) {
 
-                if (post.isLiked) {
+                post.isLiked = false
+                post.likes--
 
-                    post.isLiked = false
-                    post.likes--
+                holder.iconFavorite.setImageResource(
+                    R.drawable.ic_favorite
+                )
 
-                    holder.iconFavorite.setImageResource(
-                        R.drawable.ic_favorite
-                    )
+            } else {
 
-                } else {
+                post.isLiked = true
+                post.likes++
 
-                    post.isLiked = true
-                    post.likes++
-
-                    holder.iconFavorite.setImageResource(
-                        R.drawable.ic_favorite_filled
-                    )
-                }
-
-                holder.tvLikeCount.text = post.likes.toString()
+                holder.iconFavorite.setImageResource(
+                    R.drawable.ic_favorite_filled
+                )
             }
+
+            FirebaseFirestore.getInstance()
+                .collection("posts")
+                .document(post.id)
+                .update(
+                    mapOf(
+                        "likes" to post.likes,
+                        "isLiked" to post.isLiked
+                    )
+                )
+            holder.tvLikeCount.text = post.likes.toString()
+        }
+
             holder.iconComment.setOnClickListener {
 
             val intent = Intent(
@@ -120,19 +130,26 @@ class PostAdapter(
             holder.itemView.context.startActivity(intent)
             }
 
-            holder.iconDelete.setOnClickListener {
+        holder.iconDelete.setOnClickListener {
 
-            posts.removeAt(position)
+            val currentPosition = holder.bindingAdapterPosition
 
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(
-                position,
-                posts.size
-            )
-            }
+            FirebaseFirestore.getInstance()
+                .collection("posts")
+                .document(post.id)
+                .delete()
+                .addOnSuccessListener {
+
+                    posts.removeAt(currentPosition)
+
+                    notifyItemRemoved(currentPosition)
+                    notifyItemRangeChanged(
+                        currentPosition,
+                        posts.size
+                    )
+                }
         }
-
-
+        }
 
         override fun getItemCount(): Int {
             return posts.size

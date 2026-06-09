@@ -111,7 +111,8 @@ class CommentActivity : AppCompatActivity() {
                             document.getString("content") ?: "",
                             "now",
                             document.getLong("likeCount")?.toInt() ?: 0,
-                            document.getBoolean("isLiked") ?: false
+                            document.getBoolean("isLiked") ?: false,
+                            replyTo = document.getString("replyTo")
                         )
                     )
                 }
@@ -135,7 +136,8 @@ class CommentActivity : AppCompatActivity() {
                     "content" to text,
                     "timestamp" to System.currentTimeMillis(),
                     "likeCount" to 0,
-                    "isLiked" to false
+                    "isLiked" to false,
+                    "replyTo" to replyingTo
                 )
 
                 db.collection("comments")

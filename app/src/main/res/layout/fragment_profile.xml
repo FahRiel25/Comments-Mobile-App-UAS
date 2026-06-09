@@ -89,7 +89,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Nama username"
+                    android:text="Nama username"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp" />
             </LinearLayout>

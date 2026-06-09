@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.content.Intent
 import id.ac.pnm.comments.ui.activity.CommentActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import id.ac.pnm.comments.ui.database.FavoriteDatabase
+import id.ac.pnm.comments.ui.database.FavoriteEntity
 
 class PostAdapter(
     private val posts: MutableList<Post>
@@ -93,6 +95,21 @@ class PostAdapter(
                     R.drawable.ic_favorite
                 )
 
+                Thread {
+                    val db = FavoriteDatabase.getInstance(holder.itemView.context)
+                    db.favoriteDao().delete(
+                        FavoriteEntity(
+                            id = post.id,
+                            nama = post.nama,
+                            username = post.username,
+                            time = post.time,
+                            content = post.content,
+                            likeCount = post.likes,
+                            commentCount = post.comments
+                        )
+                    )
+                }.start()
+
             } else {
 
                 post.isLiked = true
@@ -101,6 +118,21 @@ class PostAdapter(
                 holder.iconFavorite.setImageResource(
                     R.drawable.ic_favorite_filled
                 )
+
+                Thread {
+                    val db = FavoriteDatabase.getInstance(holder.itemView.context)
+                    db.favoriteDao().insert(
+                        FavoriteEntity(
+                            id = post.id,
+                            nama = post.nama,
+                            username = post.username,
+                            time = post.time,
+                            content = post.content,
+                            likeCount = post.likes,
+                            commentCount = post.comments
+                        )
+                    )
+                }.start()
             }
 
             FirebaseFirestore.getInstance()

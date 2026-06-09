@@ -9,7 +9,6 @@ import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.model.Comment
 import android.widget.ImageView
 import com.google.firebase.firestore.FirebaseFirestore
-
 class CommentAdapter(
     private val comments: List<Comment>,
     private val onReplyClick: (String) -> Unit,

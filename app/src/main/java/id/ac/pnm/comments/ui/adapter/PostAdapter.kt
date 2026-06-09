@@ -13,6 +13,8 @@ import id.ac.pnm.comments.ui.activity.CommentActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import id.ac.pnm.comments.ui.database.FavoriteDatabase
 import id.ac.pnm.comments.ui.database.FavoriteEntity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 
 class PostAdapter(
     private val posts: MutableList<Post>
@@ -86,6 +88,10 @@ class PostAdapter(
 
         holder.iconFavorite.setOnClickListener {
 
+            val uid = FirebaseAuth.getInstance()
+                .currentUser
+                ?.uid ?: return@setOnClickListener
+
             if (post.isLiked) {
 
                 post.isLiked = false
@@ -135,15 +141,32 @@ class PostAdapter(
                 }.start()
             }
 
-            FirebaseFirestore.getInstance()
-                .collection("posts")
-                .document(post.id)
-                .update(
-                    mapOf(
-                        "likes" to post.likes,
-                        "isLiked" to post.isLiked
+            if (post.isLiked) {
+
+                FirebaseFirestore.getInstance()
+                    .collection("posts")
+                    .document(post.id)
+                    .update(
+                        mapOf(
+                            "likes" to post.likes,
+                            "likedUsers" to FieldValue.arrayUnion(uid)
+                        )
                     )
-                )
+
+            } else {
+
+                FirebaseFirestore.getInstance()
+                    .collection("posts")
+                    .document(post.id)
+                    .update(
+                        mapOf(
+                            "likes" to post.likes,
+                            "likedUsers" to FieldValue.arrayRemove(uid)
+                        )
+                    )
+            }
+
+
             holder.tvLikeCount.text = post.likes.toString()
         }
 

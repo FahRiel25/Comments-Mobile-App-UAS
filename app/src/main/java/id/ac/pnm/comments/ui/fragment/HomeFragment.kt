@@ -109,6 +109,17 @@ class HomeFragment : Fragment() {
 
                 for (document in result) {
 
+                    val uid = FirebaseAuth.getInstance()
+                        .currentUser
+                        ?.uid
+
+                    val likedUsers =
+                        document.get("likedUsers") as? List<String>
+                            ?: emptyList()
+
+                    val isLiked =
+                        likedUsers.contains(uid)
+
                     val content =
                         document.getString("content") ?: ""
 
@@ -121,7 +132,7 @@ class HomeFragment : Fragment() {
                             content = document.getString("content") ?: "",
                             likes = document.getLong("likes")?.toInt() ?: 0,
                             comments = document.getLong("comments")?.toInt() ?: 0,
-                            isLiked = document.getBoolean("isLiked") ?: false
+                            isLiked = isLiked
                         )
                     )
                 }

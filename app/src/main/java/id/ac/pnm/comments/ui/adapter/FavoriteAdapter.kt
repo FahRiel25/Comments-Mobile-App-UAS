@@ -53,7 +53,7 @@ class FavoriteAdapter (val data: MutableList<Favorite>): RecyclerView.Adapter<Fa
                         nama = favorite.nama,
                         username = favorite.username,
                         time = favorite.time,
-                        content = favorite.time,
+                        content = favorite.content,
                         likeCount = favorite.likeCount,
                         commentCount = favorite.commentCount
                     )

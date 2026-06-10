@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
                 else {
-                    Toast.makeText(this, "Login gagal: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Login gagal:", Toast.LENGTH_LONG).show()
                 }
             }
         }

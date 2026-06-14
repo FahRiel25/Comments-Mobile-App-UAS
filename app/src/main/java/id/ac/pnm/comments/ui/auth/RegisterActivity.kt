@@ -113,7 +113,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
                 }
                 else {
-                    Toast.makeText(this, "Registrasi gagal: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Registrasi gagal", Toast.LENGTH_LONG).show()
                 }
             }
         }

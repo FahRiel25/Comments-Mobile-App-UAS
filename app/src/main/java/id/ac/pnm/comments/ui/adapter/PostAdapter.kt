@@ -95,7 +95,7 @@ class PostAdapter(
             if (post.isLiked) {
 
                 post.isLiked = false
-                post.likes--
+                post.likes = maxOf(post.likes - 1, 0)
 
                 holder.iconFavorite.setImageResource(
                     R.drawable.ic_favorite

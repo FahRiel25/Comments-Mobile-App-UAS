@@ -21,7 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import id.ac.pnm.comments.ui.activity.CreatePostActivity
 import id.ac.pnm.comments.ui.model.PostRepository
 import com.google.firebase.firestore.FirebaseFirestore
-
+import com.google.firebase.firestore.Source
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
 
         db.collection("posts")
             .orderBy("timestamp")
-            .get()
+            .get(Source.SERVER)
             .addOnSuccessListener { result ->
 
                 PostRepository.posts.clear()

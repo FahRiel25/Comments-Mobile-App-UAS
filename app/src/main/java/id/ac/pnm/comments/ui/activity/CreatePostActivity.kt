@@ -68,7 +68,7 @@ class CreatePostActivity : AppCompatActivity() {
                     "likes" to 0,
                     "comments" to 0,
                     "timestamp" to System.currentTimeMillis(),
-                    "isLiked" to false,
+                    "likedUsers" to emptyList<String>()
                 )
 
                 db.collection("posts")

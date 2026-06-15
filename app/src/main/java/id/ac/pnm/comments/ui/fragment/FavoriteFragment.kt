@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import id.ac.pnm.comments.R
 import id.ac.pnm.comments.ui.adapter.FavoriteAdapter
 import id.ac.pnm.comments.ui.database.FavoriteDatabase
-import id.ac.pnm.comments.ui.model.Favorite
+import id.ac.pnm.comments.ui.model.Post
 
 class FavoriteFragment : Fragment() {
     override fun onCreateView(
@@ -19,7 +19,7 @@ class FavoriteFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         val rvFavorites = view.findViewById<RecyclerView>(R.id.rvFavorites)
-        val favoriteList = mutableListOf<Favorite>()
+        val favoriteList = mutableListOf<Post>()
         val adapter = FavoriteAdapter(favoriteList)
         rvFavorites.adapter = adapter
         rvFavorites.layoutManager = LinearLayoutManager(requireContext())
@@ -30,14 +30,14 @@ class FavoriteFragment : Fragment() {
             val data = db.favoriteDao().getAll()
 
             val list = data.map {
-                Favorite(
+                Post(
                     id = it.id,
                     nama = it.nama,
                     username = it.username,
                     time = it.time,
                     content = it.content,
-                    likeCount = it.likeCount,
-                    commentCount = it.commentCount
+                    likes = it.likeCount,
+                    comments = it.commentCount
                 )
             }
             requireActivity().runOnUiThread {

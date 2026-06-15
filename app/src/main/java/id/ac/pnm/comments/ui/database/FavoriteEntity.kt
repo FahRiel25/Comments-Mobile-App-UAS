@@ -12,5 +12,5 @@ data class FavoriteEntity(
     val time: String = "",
     val content: String = "",
     val likeCount: Int = 0,
-    val commentCount: Int = 0
+    val commentCount: Int = 0,
 )

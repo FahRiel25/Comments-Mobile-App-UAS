@@ -5,7 +5,6 @@ import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import id.ac.pnm.comments.ui.model.Favorite
 import id.ac.pnm.comments.R
 import android.view.View
 import android.widget.ImageView
@@ -16,8 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import id.ac.pnm.comments.ui.activity.CommentActivity
 import id.ac.pnm.comments.ui.database.FavoriteDatabase
 import id.ac.pnm.comments.ui.database.FavoriteEntity
+import id.ac.pnm.comments.ui.model.Post
 
-class FavoriteAdapter (val data: MutableList<Favorite>): RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
+class FavoriteAdapter (val data: MutableList<Post>): RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
     ): FavoriteViewHolder {
@@ -30,16 +30,16 @@ class FavoriteAdapter (val data: MutableList<Favorite>): RecyclerView.Adapter<Fa
         holder: FavoriteViewHolder,
         position: Int,
     ) {
-        val favorite: Favorite = data[position]
+        val favorite: Post = data[position]
         holder.icon_profile.setImageResource(R.drawable.ic_profile)
         holder.tvName.text = favorite.nama
         holder.tvUsername.text = favorite.username
         holder.tvTime.text = "· ${favorite.time}"
         holder.tvContent.text = favorite.content
         holder.icon_favorite.setImageResource(R.drawable.ic_favorite_filled)
-        holder.tvLikeCount.text = favorite.likeCount.toString()
+        holder.tvLikeCount.text = favorite.likes.toString()
         holder.icon_comment.setImageResource(R.drawable.ic_comment)
-        holder.tvCommentCount.text = favorite.commentCount.toString()
+        holder.tvCommentCount.text = favorite.comments.toString()
 
         holder.icon_favorite.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition
@@ -54,8 +54,8 @@ class FavoriteAdapter (val data: MutableList<Favorite>): RecyclerView.Adapter<Fa
                         username = favorite.username,
                         time = favorite.time,
                         content = favorite.content,
-                        likeCount = favorite.likeCount,
-                        commentCount = favorite.commentCount
+                        likeCount = favorite.likes,
+                        commentCount = favorite.comments
                     )
                 )
             }.start()
@@ -67,7 +67,7 @@ class FavoriteAdapter (val data: MutableList<Favorite>): RecyclerView.Adapter<Fa
                 .update(
                     mapOf(
                         "isLiked" to false,
-                        "likes" to favorite.likeCount -1
+                        "likes" to favorite.likes -1
                     )
                 )
 
